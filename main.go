@@ -5,26 +5,33 @@ import (
 	"net/http"
 )
 
-// Add a handler for the root path that redirects to /home
-func rootHandler(w http.ResponseWriter, r *http.Request) {
-    // Only redirect if the path is exactly "/", otherwise it's a 404
-	if r.URL.Path == "/" {
-		http.Redirect(w, r, "/home", http.StatusFound)
-		return
-	}
-	http.NotFound(w, r)
+func homePage(w http.ResponseWriter, r *http.Request) {
+	// Render the home html page from static folder
+	http.ServeFile(w, r, "static/home.html")
 }
 
-// ... (your other page handlers remain the same) ...
+func coursePage(w http.ResponseWriter, r *http.Request) {
+	// Render the course html page
+	http.ServeFile(w, r, "static/courses.html")
+}
+
+func aboutPage(w http.ResponseWriter, r *http.Request) {
+	// Render the about html page
+	http.ServeFile(w, r, "static/about.html")
+}
+
+func contactPage(w http.ResponseWriter, r *http.Request) {
+	// Render the contact html page
+	http.ServeFile(w, r, "static/contact.html")
+}
 
 func main() {
-    // Handle the root path
-	http.HandleFunc("/", rootHandler)
-    
+
 	http.HandleFunc("/home", homePage)
 	http.HandleFunc("/courses", coursePage)
 	http.HandleFunc("/about", aboutPage)
 	http.HandleFunc("/contact", contactPage)
+
 	err := http.ListenAndServe("0.0.0.0:8080", nil)
 	if err != nil {
 		log.Fatal(err)
